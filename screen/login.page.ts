@@ -2,18 +2,22 @@ import { $ } from '@wdio/globals'
 
 
 class LoginPage {
-    // public get inputvalor () {return $('#username')}
-    // public get btnSoma () {return $('#password')}
-    // public get btnIgual () {return $('button[type="submit"]')}
+    public get btnMenuTelaLogin () {return $('//android.widget.TextView[@text="Login"]')}
+    public get inputEmail () {return $('//android.widget.EditText[@content-desc="input-email"]')}
+    public get inputSenha () {return $('//android.widget.EditText[@content-desc="input-password"]')}
+    public get btnLogin () {return $('//android.view.ViewGroup[@content-desc="button-LOGIN"]/android.view.ViewGroup')}
 
-
-    public async somar(valor1: string, valor2: string) {
-        await driver.pause(5000)
-        // await this.inputvalor.setValue(valor1)
-        // await this.btnSoma.click
-        // await this.inputvalor.setValue(valor2)
-        // await this.btnIgual.click
+    public async acessarTelaLogin(){
+        await this.btnMenuTelaLogin.click()
+        await driver.pause(1000)
     }
+
+    public async login(usuario: string, senha: string){
+        await this.inputEmail.setValue(usuario)
+        await this.inputSenha.setValue(senha)
+        await this.btnLogin.click()
+    }
+
 
 
 }

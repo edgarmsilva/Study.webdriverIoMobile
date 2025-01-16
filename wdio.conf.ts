@@ -1,3 +1,5 @@
+import type { Options } from '@wdio/types'
+
 export const config: WebdriverIO.Config = {
     //
     // ====================
@@ -5,9 +7,16 @@ export const config: WebdriverIO.Config = {
     // ====================
     // WebdriverIO supports running e2e tests as well as unit and component tests.
     runner: 'local',
-    tsConfigPath: './test/tsconfig.json',
+    autoCompileOpts: {
+        autocompile: true,
+        tsNodeOpts: {
+            project: './tsconfig.json',
+            transpileOlny: true
+        }
+    },
+
     port: 4723,
-    
+
     //
     // ==================
     // Specify Test Files
@@ -56,8 +65,8 @@ export const config: WebdriverIO.Config = {
         // capabilities for local Appium web tests on an Android Emulator
         platformName: 'Android',
         // 'appium:deviceName': 'Android GoogleAPI Emulator',
-        'appium:appPackage':'com.google.android.calculator',
-        'appium:appActivity':'com.android.calculator2.Calculator',
+        'appium:appPackage': 'com.wdiodemoapp',
+        'appium:appActivity': '.MainActivity',
         'appium:platformVersion': '14.0',
         'appium:automationName': 'UiAutomator2'
     }],
