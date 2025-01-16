@@ -6,6 +6,17 @@ export const config: WebdriverIO.Config = {
     // Runner Configuration
     // ====================
     // WebdriverIO supports running e2e tests as well as unit and component tests.
+
+    // user: process.env.BROWSERSTACK_USERNAME || 'edgarsilva_kTfxBa',
+    // key: process.env.BROWSERSTACK_ACCESS_KEY || 'D9FdsMqrStw13pWSuZSd',
+    // hostname: 'cbsorgle-hub.browserstack-ats.com',
+    // port: 443,
+    // path: '/wd/hub',
+    // protocol: 'https',
+
+
+
+
     runner: 'local',
     autoCompileOpts: {
         autocompile: true,
@@ -61,15 +72,50 @@ export const config: WebdriverIO.Config = {
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://saucelabs.com/platform/platform-configurator
     //
-    capabilities: [{
-        // capabilities for local Appium web tests on an Android Emulator
-        platformName: 'Android',
-        // 'appium:deviceName': 'Android GoogleAPI Emulator',
-        'appium:appPackage': 'com.wdiodemoapp',
-        'appium:appActivity': '.MainActivity',
-        'appium:platformVersion': '14.0',
-        'appium:automationName': 'UiAutomator2'
-    }],
+    capabilities: [
+        {
+            // capabilities for local Appium web tests on an Android Emulator
+            platformName: 'Android',
+            // 'appium:deviceName': 'Android GoogleAPI Emulator',
+            'appium:appPackage': 'com.wdiodemoapp',
+            'appium:appActivity': '.MainActivity',
+            'appium:platformVersion': '14.0',
+            'appium:automationName': 'UiAutomator2'
+        },
+        // {
+        //     browserName: 'Chrome',
+        //     'bstack:options': {
+        //         browserVersion: '120.0',
+        //         os: 'Windows',
+        //         osVersion: '10'
+        //     }
+        // },
+        // {
+        //     browserName: 'Chrome',
+        //     'bstack:options': {
+        //         browserVersion: '121.0',
+        //         os: 'Windows',
+        //         osVersion: '11'
+        //     }
+        // },
+        // {
+        //     browserName: 'Chrome',
+        //     'bstack:options': {
+        //         browserVersion: '118.0',
+        //         os: 'Windows',
+        //         osVersion: '10'
+        //     }
+        // }
+    ],
+    // commonCapabilities: {
+    //     'bstack:options': {
+    //         buildName: "bstack-demo",
+    //         projectName: "BrowserStack Sample",
+    //         networkLogs: "true",
+    //         consoleLogs: "info",
+    //     }
+    // },
+
 
     //
     // ===================
@@ -79,6 +125,7 @@ export const config: WebdriverIO.Config = {
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
     logLevel: 'info',
+
     //
     // Set specific log levels per logger
     // loggers:
@@ -118,7 +165,12 @@ export const config: WebdriverIO.Config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    // services: [],
+    // services: [
+    //     [
+    //         'browserstack',
+    //         { turboScale: true },
+    //     ],
+    // ],
     //
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
@@ -127,7 +179,28 @@ export const config: WebdriverIO.Config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'mocha',
-    
+
+    beforeScenario: async function (world, context) {
+        // Verifica se é um aplicativo móvel 
+        if (browser.isMobile) {
+            // Inicia o aplicativo móvel 
+            await driver.activateApp('com.wdiodemoapp');
+        }
+    },
+
+
+    afterScenario: async function (world, result, context) {
+        console.log('afterScenario hook called');
+        // Verifica se é um aplicativo móvel 
+        if (browser.isMobile) {
+            // Encerra o aplicativo móvel 
+            console.log('Terminating app');
+            await driver.terminateApp('com.wdiodemoapp');
+        }
+        // Encerra a sessão do navegador 
+        await browser.deleteSession();
+    },
+
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
@@ -309,4 +382,10 @@ export const config: WebdriverIO.Config = {
     */
     // afterAssertion: function(params) {
     // }
+
 }
+// exports.config.capabilities.forEach(function (caps) {
+//     for (let i in exports.config.commonCapabilities)
+//       caps[i] = { ...caps[i], ...exports.config.commonCapabilities[i]};
+//   });
+

@@ -6,6 +6,7 @@ class LoginPage {
     public get inputEmail () {return $('//android.widget.EditText[@content-desc="input-email"]')}
     public get inputSenha () {return $('//android.widget.EditText[@content-desc="input-password"]')}
     public get btnLogin () {return $('//android.view.ViewGroup[@content-desc="button-LOGIN"]/android.view.ViewGroup')}
+    public get btnOk () {return $('//android.widget.Button[@resource-id="android:id/button1"]')}
 
     public async acessarTelaLogin(){
         await this.btnMenuTelaLogin.click()
